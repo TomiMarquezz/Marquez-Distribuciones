@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Catálogo Simple con WhatsApp</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 text-gray-800">
+  <header class="bg-green-600 text-white p-4 shadow-lg">
+    <h1 class="text-2xl font-bold text-center">Mi Tienda • Catálogo Online</h1>
+  </header>
+
+  <main class="container mx-auto p-4">
+    <!-- Productos -->
+    <section id="product-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></section>
+
+    <!-- Carrito -->
+    <section class="mt-8 bg-white p-4 shadow rounded-lg">
+      <h2 class="text-xl font-semibold mb-2">🛒 Carrito</h2>
+      <ul id="cart-list" class="space-y-2"></ul>
+      <p id="cart-total" class="font-bold mt-2">Total: $0</p>
+
+      <div class="mt-4 flex flex-col sm:flex-row gap-2">
+        <button
+          id="whatsapp-btn"
+          class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
+        >
+          Enviar pedido por WhatsApp
+        </button>
+        <button
+          id="clear-cart-btn"
+          class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
+        >
+          Vaciar carrito
+        </button>
+      </div>
+    </section>
+  </main>
+
+  <footer class="text-center text-sm text-gray-500 my-6">
+    Creado con ❤️ como demo. Personalizá productos y precios en <code>products</code> dentro del script.
+  </footer>
+
+  <script>
+    const products = [
+      {
+        id: 1,
+        name: "Manzanas",
+        description: "Manzanas rojas frescas por kilo.",
+        price: 1200,
+        image: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce",
+      },
+      {
+        id: 2,
+        name: "Pan Artesanal",
+        description: "Pan de masa madre recién horneado.",
+        price: 800,
+        image: "https://images.unsplash.com/photo-1608198093002-ad4e005484f7",
+      },
+      {
+        id: 3,
+        name: "Leche",
+        description: "Leche entera sachet 1 L.",
+        price: 600,
+        image: "https://images.unsplash.com/photo-1587202372775-989d05f5848b",
+      },
+      {
+        id: 4,
+        name: "Huevos",
+        description: "Maple de 30 huevos camperos.",
+        price: 2400,
+        image: "https://images.unsplash.com/photo-1610386205444-83d9eb1b7f9f",
+      },
+      {
+        id: 5,
+        name: "Queso Crema",
+        description: "Pote 300 g.",
+        price: 1500,
+        image: "https://images.unsplash.com/photo-1585238341979-c7b4cfa11c00",
+      },
+      {
+        id: 6,
+        name: "Yerba Mate",
+        description: "1 kg, sin TACC.",
+        price: 2600,
+        image: "https://images.unsplash.com/photo-1607012628567-2e011996ac4f",
+      },
+    ];
+
+    const empresaWhatsApp = "5493564527227"; // Número fijo de la empresa
+
+    const productGrid = document.getElementById("product-grid");
+    const cartList = document.getElementById("cart-list");
+    const cartTotalEl = document.getElementById("cart-total");
+    const whatsappBtn = document.getElementById("whatsapp-btn");
+    const clearCartBtn = document.getElementById("clear-cart-btn");
+    let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+    function renderProducts() {
+      productGrid.innerHTML = "";
+      products.forEach((prod) => {
+        const card = document.createElement("div");
+        card.className =
+          "bg-white p-4 rounded-lg shadow hover:shadow-lg transition";
+        card.innerHTML = `
+        <img src="${prod.image}" alt="${prod.name}" class="w-full h-40 object-cover rounded mb-2" />
+        <h3 class="font-semibold text-lg">${prod.name}</h3>
+        <p class="text-sm text-gray-600 mb-2">${prod.description}</p>
+        <p class="font-bold mb-3">$${prod.price}</p>
+        <button data-id="${prod.id}" class="add-btn bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded">Agregar</button>
+      `;
+        productGrid.appendChild(card);
+      });
+    }
+
+    function renderCart() {
+      cartList.innerHTML = "";
+      let total = 0;
+      cart.forEach((item) => {
+        const li = document.createElement("li");
+        li.className = "flex justify-between items-center gap-2";
+        li.innerHTML = `
+        <span>${item.qty} × ${item.name} — $${item.price * item.qty}</span>
+        <button data-id="${item.id}" class="remove-btn bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded">Quitar</button>
+      `;
+        cartList.appendChild(li);
+        total += item.price * item.qty;
+      });
+      cartTotalEl.textContent = `Total: $${total}`;
+      whatsappBtn.disabled = cart.length === 0;
+      clearCartBtn.disabled = cart.length === 0;
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+
+    function addToCart(id) {
+      const product = products.find((p) => p.id === id);
+      const existing = cart.find((c) => c.id === id);
+      if (existing) {
+        existing.qty += 1;
+      } else {
+        cart.push({ ...product, qty: 1 });
+      }
+      renderCart();
+    }
+
+    function removeOneFromCart(id) {
+      const index = cart.findIndex((c) => c.id === id);
+      if (index !== -1) {
+        cart[index].qty -= 1;
+        if (cart[index].qty <= 0) cart.splice(index, 1);
+        renderCart();
+      }
+    }
+
+    function clearCart() {
+      cart = [];
+      renderCart();
+    }
+
+    function sendWhatsApp() {
+      let message = `Hola! Quiero hacer el siguiente pedido:%0A`;
+      cart.forEach((item) => {
+        message += `${item.qty}× ${item.name} - $${item.price * item.qty}%0A`;
+      });
+      const total = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
+      message += `--------------------%0ATotal: $${total}`;
+
+      const url = `https://wa.me/${empresaWhatsApp}?text=${encodeURIComponent(
+        message
+      )}`;
+      window.open(url, "_blank");
+      clearCart();
+    }
+
+    document.addEventListener("click", (e) => {
+      if (e.target.matches(".add-btn")) {
+        const id = parseInt(e.target.getAttribute("data-id"));
+        addToCart(id);
+      }
+      if (e.target.matches(".remove-btn")) {
+        const id = parseInt(e.target.getAttribute("data-id"));
+        removeOneFromCart(id);
+      }
+    });
+
+    whatsappBtn.addEventListener("click", sendWhatsApp);
+    clearCartBtn.addEventListener("click", clearCart);
+
+    renderProducts();
+    renderCart();
+  </script>
+</body>
+</html>

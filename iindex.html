@@ -6,89 +6,72 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 text-gray-800">
-  <header class="bg-orange-600 text-white p-4 shadow-lg">
-    <h1 class="text-2xl font-oxygen text-center">DISTRIBUCIONES MARQUEZ</h1>
+<body class="bg-orange-600 text-white">
+  <header class="p-4 shadow-lg">
+    <h1 class="text-2xl font-bold text-center">Distribuciones Marquez</h1>
   </header>
 
   <main class="container mx-auto p-4">
-    <!-- Productos -->
     <section id="product-grid" class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"></section>
 
-    <!-- Carrito -->
-    <section class="mt-8 bg-white p-4 shadow rounded-lg">
+    <section class="mt-8 bg-white text-black p-4 shadow rounded-lg">
       <h2 class="text-xl font-semibold mb-2">🛒 Carrito</h2>
       <ul id="cart-list" class="space-y-2"></ul>
       <p id="cart-total" class="font-bold mt-2">Total: $0</p>
 
       <div class="mt-4 flex flex-col sm:flex-row gap-2">
-        <button
-          id="whatsapp-btn"
-          class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
-        >
+        <button id="whatsapp-btn" class="bg-green-600 hover:bg-green-700 text-white font-semibold py-2 px-4 rounded disabled:opacity-50">
           Enviar pedido por WhatsApp
         </button>
-        <button
-          id="clear-cart-btn"
-          class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded disabled:opacity-50"
-        >
+        <button id="clear-cart-btn" class="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded disabled:opacity-50">
           Vaciar carrito
         </button>
       </div>
     </section>
   </main>
 
-  <footer class="text-center text-sm text-gray-500 my-6">
-    Creado con ❤️ como demo. Personalizá productos y precios en <code>products</code> dentro del script.
+  <footer class="text-center text-sm text-white my-6">
+    Creado por Thomas Marquez 😮‍💨
   </footer>
 
   <script>
     const products = [
       {
         id: 1,
-        name: "Manzanas",
-        description: "Manzanas rojas frescas por kilo.",
-        price: 1200,
-        image: "https://images.unsplash.com/photo-1567306226416-28f0efdc88ce",
+        name: "Milanesas de Pollo",
+        description: "1kg",
+        price: 7980,
+        image: "https://i.imgur.com/Zdlp3RZ.jpeg",
       },
       {
         id: 2,
-        name: "Pan Artesanal",
-        description: "Pan de masa madre recién horneado.",
-        price: 800,
-        image: "https://images.unsplash.com/photo-1608198093002-ad4e005484f7",
+        name: "Milanesas de Carne",
+        description: "1kg",
+        price: 9980,
+        image: "https://i.imgur.com/UPOaSFq.jpeg",
       },
       {
         id: 3,
-        name: "Leche",
-        description: "Leche entera sachet 1 L.",
-        price: 600,
-        image: "https://images.unsplash.com/photo-1587202372775-989d05f5848b",
+        name: "Pollo Entero",
+        description: "Promedio 2.5kg",
+        price: 3400,
+        image: "https://i.imgur.com/GiLVs9O.jpeg",
       },
       {
         id: 4,
-        name: "Huevos",
-        description: "Maple de 30 huevos camperos.",
-        price: 2400,
-        image: "https://images.unsplash.com/photo-1610386205444-83d9eb1b7f9f",
+        name: "Muslos de Pollo",
+        description: "1kg",
+        price: 2900,
+        image: "https://i.imgur.com/UiPkw5v.jpeg",
       },
       {
         id: 5,
-        name: "Queso Crema",
-        description: "Pote 300 g.",
-        price: 1500,
-        image: "https://images.unsplash.com/photo-1585238341979-c7b4cfa11c00",
-      },
-      {
-        id: 6,
-        name: "Yerba Mate",
-        description: "1 kg, sin TACC.",
-        price: 2600,
-        image: "https://images.unsplash.com/photo-1607012628567-2e011996ac4f",
-      },
+        name: "Cajón de Pollo",
+        description: "Caja x 20kg",
+        price: 63000,
+        image: "https://i.imgur.com/A16cBHP.jpeg",
+      }
     ];
-
-    const empresaWhatsApp = "5493564527227"; // Número fijo de la empresa
 
     const productGrid = document.getElementById("product-grid");
     const cartList = document.getElementById("cart-list");
@@ -101,15 +84,14 @@
       productGrid.innerHTML = "";
       products.forEach((prod) => {
         const card = document.createElement("div");
-        card.className =
-          "bg-white p-4 rounded-lg shadow hover:shadow-lg transition";
+        card.className = "bg-white text-black p-4 rounded-lg shadow hover:shadow-lg transition";
         card.innerHTML = `
-        <img src="${prod.image}" alt="${prod.name}" class="w-full h-40 object-cover rounded mb-2" />
-        <h3 class="font-semibold text-lg">${prod.name}</h3>
-        <p class="text-sm text-gray-600 mb-2">${prod.description}</p>
-        <p class="font-bold mb-3">$${prod.price}</p>
-        <button data-id="${prod.id}" class="add-btn bg-orange-600 hover:bg-orange-700 text-white py-1 px-3 rounded">Agregar</button>
-      `;
+          <img src="${prod.image}" alt="${prod.name}" class="w-full h-40 object-cover rounded mb-2" />
+          <h3 class="font-semibold text-lg">${prod.name}</h3>
+          <p class="text-sm text-gray-600 mb-2">${prod.description}</p>
+          <p class="font-bold mb-3">$${prod.price}</p>
+          <button data-id="${prod.id}" class="add-btn bg-blue-600 hover:bg-blue-700 text-white py-1 px-3 rounded">Agregar</button>
+        `;
         productGrid.appendChild(card);
       });
     }
@@ -121,9 +103,9 @@
         const li = document.createElement("li");
         li.className = "flex justify-between items-center gap-2";
         li.innerHTML = `
-        <span>${item.qty} × ${item.name} — $${item.price * item.qty}</span>
-        <button data-id="${item.id}" class="remove-btn bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded">Quitar</button>
-      `;
+          <span>${item.qty} × ${item.name} — $${item.price * item.qty}</span>
+          <button data-id="${item.id}" class="remove-btn bg-red-500 hover:bg-red-600 text-white text-xs px-2 py-1 rounded">Quitar</button>
+        `;
         cartList.appendChild(li);
         total += item.price * item.qty;
       });
@@ -159,16 +141,14 @@
     }
 
     function sendWhatsApp() {
-      let message = `Hola! Quiero hacer el siguiente pedido:%0A`;
-      cart.forEach((item) => {
-        message += `${item.qty}× ${item.name} - $${item.price * item.qty}%0A`;
+      let message = "Hola, buenos días! \n\n Pedido:\n";
+      cart.forEach(item => {
+        message += `• ${item.qty}× ${item.name} — $${item.price * item.qty}\n`;
       });
       const total = cart.reduce((acc, item) => acc + item.price * item.qty, 0);
-      message += `--------------------%0ATotal: $${total}`;
+      message += `\n Total: $${total}\n\nGracias 🙌🏻`;
 
-      const url = `https://wa.me/${empresaWhatsApp}?text=${encodeURIComponent(
-        message
-      )}`;
+      const url = `https://wa.me/5493564527227?text=${encodeURIComponent(message)}`;
       window.open(url, "_blank");
       clearCart();
     }
